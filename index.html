@@ -504,8 +504,11 @@
 // ── Config ──────────────────────────────────────
 const ADMIN_PASSWORD = 'admin4711';
 const SUPABASE_URL = 'https://bmivqyoqnwjkcquqtoyl.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_B6Yqqr6w_YooZOnqyD3PDg_X3a6XMUv';
+// const SUPABASE_KEY = 'sb_publishable_B6Yqqr6w_YooZOnqyD3PDg_X3a6XMUv';
+const SUPABASE_KEY = 'const SUPABASE_KEY = 'sb_publishable_B6Yqqr6w_YooZOnqyD3PDg_X3a6XMUv';
+';
 
+  
 // ── Supabase helpers ─────────────────────────────
 async function getData() {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/teilnehmer?select=*&order=id.asc`, {
@@ -613,7 +616,8 @@ async function submitForm() {
   btn.disabled = true;
 
   try {
-    const timestamp = new Date().toLocaleString('de-DE');
+    // const timestamp = new Date().toLocaleString('de-DE');
+    const timestamp = new Date().toISOString();
     await saveEntries(persons, timestamp);
     document.getElementById('persons-container').innerHTML = '';
     personCount = 0;
