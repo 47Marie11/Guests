@@ -119,7 +119,7 @@
       <button class="add-btn" onclick="addPerson()">+ Person hinzufügen</button>
     </div>
     <button class="submit-btn" onclick="submitForm()">Absenden</button>
-    <div class="success" id="success-msg">Vielen Dank! Eure Antworten wurden gespeichert.</div>
+    <div class="success" id="success-msg"></div>
   </div>
 
   <div id="panel-admin" class="panel">
@@ -250,6 +250,7 @@ async function submitForm() {
     document.getElementById('persons-container').innerHTML = '';
     personCount = 0;
     addPerson();
+    document.getElementById('success-msg').textContent = persons.length === 1 ? '✓  Vielen Dank! Deine Antwort wurde gespeichert.' : '✓  Vielen Dank! Eure Antworten wurden gespeichert.';
     document.getElementById('success-msg').classList.add('show');
     setTimeout(function() { document.getElementById('success-msg').classList.remove('show'); }, 4000);
   } catch(e) {
