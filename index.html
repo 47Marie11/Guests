@@ -246,11 +246,12 @@ async function submitForm() {
   btn.disabled = true;
 
   try {
+    const anzahl = persons.length;
     await saveEntries(persons);
     document.getElementById('persons-container').innerHTML = '';
     personCount = 0;
     addPerson();
-    document.getElementById('success-msg').textContent = persons.length === 1 ? '✓  Vielen Dank! Deine Antwort wurde gespeichert.' : '✓  Vielen Dank! Eure Antworten wurden gespeichert.';
+    document.getElementById('success-msg').textContent = anzahl === 1 ? '✓  Vielen Dank! Deine Antwort wurde gespeichert.' : '✓  Vielen Dank! Eure Antworten wurden gespeichert.';
     document.getElementById('success-msg').classList.add('show');
     setTimeout(function() { document.getElementById('success-msg').classList.remove('show'); }, 4000);
   } catch(e) {
