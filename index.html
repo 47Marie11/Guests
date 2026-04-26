@@ -619,8 +619,11 @@ async function submitForm() {
     // const timestamp = new Date().toLocaleString('de-DE');
     const timestamp = new Date().toISOString();
     await saveEntries(persons, timestamp);
+    // document.getElementById('persons-container').innerHTML = '';
+    // personCount = 0;
+    // addPerson();
     document.getElementById('persons-container').innerHTML = '';
-    personCount = 0;
+    personCount = Date.now();
     addPerson();
     document.getElementById('success-msg').classList.add('show');
     setTimeout(() => document.getElementById('success-msg').classList.remove('show'), 4000);
