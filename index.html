@@ -550,20 +550,20 @@ let personCount = 0;
 
 function addPerson(prefillName, prefillAntwort) {
   personCount++;
-  const id = personCount;
+  const id = 'p' + Date.now() + personCount;
   const container = document.getElementById('persons-container');
   const div = document.createElement('div');
   div.className = 'person-block form-card';
   div.style.cssText = 'margin-bottom:16px;padding:24px 32px 24px 24px;';
   div.id = 'person-' + id;
 
-  const labels = id === 1 ? 'Name' : id === 2 ? 'Partner / Partnerin' : 'Kind / Weitere Person';
+  const blockCount = document.querySelectorAll('.person-block').length + 1;
+  const labels = blockCount === 1 ? 'Name' : blockCount === 2 ? 'Partner / Partnerin' : 'Kind / Weitere Person';
   const antwort = prefillAntwort || '';
-
-  const questionLabel = id === 1 ? 'Kommst du?' : 'Feiert mit?';
+  const questionLabel = blockCount === 1 ? 'Kommst du?' : 'Feiert mit?';
 
   div.innerHTML = `
-    ${id > 1 ? `<button class="remove-btn" onclick="removePerson(${id})" title="Entfernen">×</button>` : ''}
+    ${blockCount > 1 ? `<button class="remove-btn" onclick="removePerson('${id}')" title="Entfernen">×</button>` : ''}
     <div class="field">
       <label>${labels}</label>
       <input type="text" id="name-${id}" placeholder="Name" value="${prefillName || ''}">
