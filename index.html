@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maries 30. Geburtstag</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm-white: #ffffff;
+    --ink: #1a1a18;
+    --muted: #6b6860;
+    --accent: #8b6f47;
+    --accent-light: #c4a882;
+    --yes: #4a7c59;
+    --no: #a04040;
+    --maybe: #7a6d3a;
+    --border: #e2ddd6;
+    --shadow: 0 4px 24px rgba(0,0,0,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+  header { text-align: center; padding: 56px 24px 40px; background: var(--warm-white); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% -20%, #e8dfd0 0%, transparent 70%); pointer-events: none; }
+  .header-ornament { font-family: 'Playfair Display', serif; font-size: 14px; letter-spacing: 0.12em; color: var(--accent-light); margin-bottom: 14px; font-weight: 600; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 48px); font-weight: 700; color: var(--ink); line-height: 1.15; display: flex; flex-direction: column; align-items: stretch; max-width: 520px; margin-inline: auto; }
+  header p { margin-top: 12px; color: #2a6496; font-weight: 500; font-size: 16px; max-width: 500px; margin-inline: auto; }
+  .divider { width: 48px; height: 1px; background: var(--accent-light); margin: 20px auto; }
+  .tabs { display: flex; justify-content: center; background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 0 24px; }
+  .tab { padding: 14px 28px; font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:hover:not(.active) { color: var(--ink); }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+  .panel { display: none; animation: fadeIn 0.3s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .form-card { background: var(--warm-white); border: 1px solid var(--border); border-radius: 12px; padding: 36px; box-shadow: var(--shadow); margin-bottom: 24px; }
+  .form-card h2 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 6px; }
+  .form-card .subtitle { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  input[type="text"] { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 15px; background: var(--cream); color: var(--ink); transition: border-color 0.2s, box-shadow 0.2s; outline: none; }
+  input[type="text"]:focus { border-color: var(--accent-light); box-shadow: 0 0 0 3px rgba(196,168,130,0.15); }
+  .choice-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .choice-group input[type="radio"] { display: none; }
+  .choice-label { flex: 1; min-width: 80px; text-align: center; padding: 11px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.18s; background: var(--cream); color: var(--ink); }
+  .choice-label:hover { border-color: var(--accent-light); background: #f5f0e8; }
+  input[value="Ja"]:checked + .choice-label { background: #edf6f0; border-color: var(--yes); color: var(--yes); }
+  input[value="Nein"]:checked + .choice-label { background: #fdf0f0; border-color: var(--no); color: var(--no); }
+  input[value="Unsicher"]:checked + .choice-label { background: #f7f4e8; border-color: var(--maybe); color: var(--maybe); }
+  .add-btn { width: 100%; padding: 14px; border: 1.5px dashed var(--border); border-radius: 8px; background: none; font-family: 'Jost', sans-serif; font-size: 14px; color: var(--muted); cursor: pointer; transition: all 0.2s; margin-top: 4px; }
+  .add-btn:hover { border-color: var(--accent-light); color: var(--accent); background: #faf6ef; }
+  .remove-btn { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1; transition: color 0.2s; position: absolute; top: 16px; right: 16px; }
+  .remove-btn:hover { color: var(--no); }
+  .person-block { position: relative; }
+  .submit-btn { width: 100%; padding: 16px; background: var(--accent); color: white; border: none; border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  .submit-btn:hover { background: #7a6040; transform: translateY(-1px); }
+  .submit-btn:active { transform: none; }
+  .success { display: none; background: #edf6f0; border: 1px solid #a5c9b0; border-radius: 8px; padding: 20px 24px; text-align: center; color: var(--yes); font-size: 15px; margin-top: 16px; }
+  .success.show { display: block; animation: fadeIn 0.3s ease; }
+  .admin-lock { text-align: center; padding: 48px 24px; }
+  .admin-lock p { color: var(--muted); margin-bottom: 20px; font-size: 14px; }
+  .pin-row { display: flex; gap: 10px; justify-content: center; max-width: 320px; margin: 0 auto; }
+  .pin-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 15px; background: var(--warm-white); outline: none; }
+  .pin-btn { padding: 12px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .pin-btn:hover { background: #7a6040; }
+  .pin-error { color: var(--no); font-size: 13px; margin-top: 10px; display: none; }
+  .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .results-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; }
+  .count-badge { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .export-btn { padding: 10px 18px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--ink); transition: all 0.2s; }
+  .export-btn:hover { background: var(--cream); border-color: var(--accent-light); }
+  .table-wrap { background: var(--warm-white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--ink); color: white; }
+  thead th { padding: 14px 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-align: left; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--cream); }
+  td { padding: 13px 20px; font-size: 14px; }
+  td:first-child { font-weight: 500; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+  .badge-ja { background: #edf6f0; color: var(--yes); }
+  .badge-nein { background: #fdf0f0; color: var(--no); }
+  .badge-unsicher { background: #f7f4e8; color: var(--maybe); }
+  .empty-state { text-align: center; padding: 56px 24px; color: var(--muted); font-size: 14px; }
+  .summary-row { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .summary-card { flex: 1; min-width: 80px; background: var(--warm-white); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .summary-card .num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+  .summary-card .lbl { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .num-ja { color: var(--yes); } .num-nein { color: var(--no); } .num-unsicher { color: var(--maybe); } .num-total { color: var(--ink); }
+  @media (max-width: 480px) { .form-card { padding: 24px 18px; } thead th, td { padding: 12px 14px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-ornament">Samstag, 15.08.2026</div>
+  <h1>
+    <span style="text-align:left;display:block;white-space:nowrap">Maries</span>
+    <span style="text-align:right;display:block;white-space:nowrap">30. Geburtstag</span>
+  </h1>
+  <div class="divider"></div>
+  <p>Bitte tragt euch und Partner/Kinder jeweils einzeln ein.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab('form')">Anmelden</button>
+  <button class="tab" onclick="switchTab('admin')">Ergebnisse</button>
+</nav>
+
+<main>
+  <div id="panel-form" class="panel active">
+    <div class="form-card">
+      <h2>Bitte alle einzeln eintragen</h2>
+      <p class="subtitle">Bitte tragt euch und Partner/Kinder jeweils einzeln ein.</p>
+      <div id="persons-container"></div>
+      <button class="add-btn" onclick="addPerson()">+ Person hinzufügen</button>
+    </div>
+    <button class="submit-btn" onclick="submitForm()">Absenden</button>
+    <div class="success" id="success-msg">Vielen Dank! Eure Antworten wurden gespeichert.</div>
+  </div>
+
+  <div id="panel-admin" class="panel">
+    <div id="admin-lock" class="admin-lock">
+      <p>Bitte gebt das Admin-Passwort ein:</p>
+      <div class="pin-row">
+        <input type="password" id="pin-input" placeholder="Passwort" onkeydown="if(event.key==='Enter')checkPin()">
+        <button class="pin-btn" onclick="checkPin()">OK</button>
+      </div>
+      <div class="pin-error" id="pin-error">Falsches Passwort.</div>
+    </div>
+    <div id="admin-content" style="display:none">
+      <div class="results-header">
+        <div>
+          <h2>Ergebnisse</h2>
+          <span class="count-badge" id="total-count"></span>
+        </div>
+        <button class="export-btn" onclick="exportCSV()">CSV exportieren</button>
+      </div>
+      <div class="summary-row" id="summary-row"></div>
+      <div class="table-wrap"><div id="table-container"></div></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const ADMIN_PASSWORD = 'admin4711';
+const SUPABASE_URL = 'https://bmivqyoqnwjkcquqtoyl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtaXZxeW9xbndqa2NxdXF0b3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTMzMTIsImV4cCI6MjA5MjcyOTMxMn0.pcn3l4PoKfQCbh4V-Rli1qg5jxjm2XZHqMZEA2eJlvc';
+
+async function getData() {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/teilnehmer?select=*&order=id.asc', {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+  });
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
+  return await res.json();
+}
+
+async function saveEntries(persons) {
+  const rows = persons.map(p => ({ name: p.name, antwort: p.antwort }));
+  const res = await fetch(SUPABASE_URL + '/rest/v1/teilnehmer', {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(rows)
+  });
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+let personCount = 0;
+
+function addPerson(prefillName, prefillAntwort) {
+  personCount++;
+  const id = 'p' + Date.now() + '_' + personCount;
+  const container = document.getElementById('persons-container');
+  const div = document.createElement('div');
+  div.className = 'person-block form-card';
+  div.style.cssText = 'margin-bottom:16px;padding:24px 32px 24px 24px;';
+  div.id = 'person-' + id;
+
+  const blockCount = document.querySelectorAll('.person-block').length + 1;
+  const labelText = blockCount === 1 ? 'Name' : blockCount === 2 ? 'Partner / Partnerin' : 'Kind / Weitere Person';
+  const questionLabel = blockCount === 1 ? 'Kommst du?' : 'Feiert mit?';
+  const antwort = prefillAntwort || '';
+
+  div.innerHTML =
+    (blockCount > 1 ? '<button class="remove-btn" onclick="removePerson(\'' + id + '\')" title="Entfernen">x</button>' : '') +
+    '<div class="field">' +
+      '<label>' + labelText + '</label>' +
+      '<input type="text" id="name-' + id + '" placeholder="Name" value="' + (prefillName || '') + '">' +
+    '</div>' +
+    '<div class="field">' +
+      '<label>' + questionLabel + '</label>' +
+      '<div class="choice-group">' +
+        ['Ja','Nein','Unsicher'].map(function(v) {
+          return '<input type="radio" name="antwort-' + id + '" id="r-' + id + '-' + v + '" value="' + v + '"' + (antwort === v ? ' checked' : '') + '>' +
+                 '<label class="choice-label" for="r-' + id + '-' + v + '">' + v + '</label>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+
+  container.appendChild(div);
+}
+
+function removePerson(id) {
+  var el = document.getElementById('person-' + id);
+  if (el) el.remove();
+}
+
+function getPersons() {
+  var persons = [];
+  document.querySelectorAll('.person-block').forEach(function(block) {
+    var id = block.id.replace('person-', '');
+    var nameEl = document.getElementById('name-' + id);
+    var checkedEl = document.querySelector('input[name="antwort-' + id + '"]:checked');
+    if (nameEl) {
+      persons.push({ name: nameEl.value.trim(), antwort: checkedEl ? checkedEl.value : '' });
+    }
+  });
+  return persons;
+}
+
+async function submitForm() {
+  var persons = getPersons();
+  if (persons.length === 0) { alert('Bitte füge mindestens eine Person hinzu.'); return; }
+  for (var i = 0; i < persons.length; i++) {
+    if (!persons[i].name) { alert('Bitte trage alle Namen ein.'); return; }
+    if (!persons[i].antwort) { alert('Bitte wähle eine Antwort für "' + persons[i].name + '".'); return; }
+  }
+
+  var btn = document.querySelector('.submit-btn');
+  btn.textContent = 'Wird gespeichert...';
+  btn.disabled = true;
+
+  try {
+    await saveEntries(persons);
+    document.getElementById('persons-container').innerHTML = '';
+    personCount = 0;
+    addPerson();
+    document.getElementById('success-msg').classList.add('show');
+    setTimeout(function() { document.getElementById('success-msg').classList.remove('show'); }, 4000);
+  } catch(e) {
+    alert('Fehler beim Speichern: ' + e.message);
+  } finally {
+    btn.textContent = 'Absenden';
+    btn.disabled = false;
+  }
+}
+
+function checkPin() {
+  var val = document.getElementById('pin-input').value;
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('admin-lock').style.display = 'none';
+    document.getElementById('admin-content').style.display = 'block';
+    renderTable();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+  }
+}
+
+async function renderTable() {
+  document.getElementById('table-container').innerHTML = '<div class="empty-state">Daten werden geladen...</div>';
+  var data;
+  try { data = await getData(); }
+  catch(e) { document.getElementById('table-container').innerHTML = '<div class="empty-state">Fehler: ' + e.message + '</div>'; return; }
+
+  document.getElementById('total-count').textContent = data.length + ' Eintraege gesamt';
+
+  var ja = data.filter(function(d) { return d.antwort === 'Ja'; }).length;
+  var nein = data.filter(function(d) { return d.antwort === 'Nein'; }).length;
+  var unsicher = data.filter(function(d) { return d.antwort === 'Unsicher'; }).length;
+
+  document.getElementById('summary-row').innerHTML =
+    '<div class="summary-card"><div class="num num-total">' + data.length + '</div><div class="lbl">Gesamt</div></div>' +
+    '<div class="summary-card"><div class="num num-ja">' + ja + '</div><div class="lbl">Ja</div></div>' +
+    '<div class="summary-card"><div class="num num-nein">' + nein + '</div><div class="lbl">Nein</div></div>' +
+    '<div class="summary-card"><div class="num num-unsicher">' + unsicher + '</div><div class="lbl">Unsicher</div></div>';
+
+  var tc = document.getElementById('table-container');
+  if (data.length === 0) { tc.innerHTML = '<div class="empty-state">Noch keine Eintraege vorhanden.</div>'; return; }
+
+  var rows = data.map(function(d, i) {
+    var cls = d.antwort === 'Ja' ? 'badge-ja' : d.antwort === 'Nein' ? 'badge-nein' : 'badge-unsicher';
+    var zeit = d.zeit ? new Date(d.zeit).toLocaleString('de-DE') : '-';
+    return '<tr><td>' + (i+1) + '</td><td>' + escHtml(d.name) + '</td><td><span class="badge ' + cls + '">' + escHtml(d.antwort) + '</span></td><td style="color:var(--muted);font-size:12px">' + zeit + '</td></tr>';
+  }).join('');
+
+  tc.innerHTML = '<table><thead><tr><th>#</th><th>Name</th><th>Antwort</th><th>Zeitstempel</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function exportCSV() {
+  var data;
+  try { data = await getData(); } catch(e) { alert('Fehler: ' + e.message); return; }
+  var bom = '\uFEFF';
+  var header = 'Name,Antwort,Zeitstempel\n';
+  var rows = data.map(function(d) {
+    var zeit = d.zeit ? new Date(d.zeit).toLocaleString('de-DE') : '';
+    return '"' + (d.name||'').replace(/"/g,'""') + '","' + d.antwort + '","' + zeit + '"';
+  }).join('\n');
+  var blob = new Blob([bom + header + rows], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'teilnehmer.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+addPerson();
+</script>
+</body>
+</html>
