@@ -141,6 +141,12 @@
         <button class="export-btn" onclick="exportCSV()">CSV exportieren</button>
       </div>
       <div class="summary-row" id="summary-row"></div>
+
+      <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;box-shadow:var(--shadow)">
+        <div style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:12px">Noch nicht angemeldet</div>
+        <div id="nicht-angemeldet"></div>
+      </div>
+
       <div class="table-wrap"><div id="table-container"></div></div>
     </div>
   </div>
@@ -279,7 +285,14 @@ function sortTable(key) {
 
 function renderTable() {
   document.getElementById('table-container').innerHTML = '<div class="empty-state">Daten werden geladen...</div>';
-  getData().then(function(data) {
+  Promise.all([
+    getData(),
+    fetch(SUPABASE_URL + '/rest/v1/eingeladene?select=*', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    }).then(function(res) { return res.json(); })
+  ]).then(function(results) {
+    var data = results[0];
+    var eingeladene = results[1];
     document.getElementById('total-count').textContent = data.length + ' Eintraege gesamt';
 
     var ja = data.filter(function(d) { return d.antwort === 'Ja'; }).length;
@@ -310,7 +323,7 @@ function renderTable() {
     var rows = data.map(function(d, i) {
       var cls = d.antwort === 'Ja' ? 'badge-ja' : d.antwort === 'Nein' ? 'badge-nein' : 'badge-unsicher';
       var zeit = d.zeit ? new Date(d.zeit).toLocaleString('de-DE') : '-';
-      var kindBadge = d.kind === 'Ja' ? '<span class="badge badge-ja">Ja</span>' : d.kind === 'Nein' ? '<span class="badge badge-nein">Nein</span>' : '<span style="color:var(--muted)">-</span>';
+      var kindBadge = d.kind === 'Ja' ? '<span class="badge badge-ja">Ja</span>' : '';
       return '<tr><td>' + (i+1) + '</td><td>' + escHtml(d.name) + '</td><td><span class="badge ' + cls + '">' + escHtml(d.antwort) + '</span></td><td>' + kindBadge + '</td><td style="color:var(--muted);font-size:12px">' + zeit + '</td></tr>';
     }).join('');
 
@@ -322,6 +335,21 @@ function renderTable() {
       '<th onclick="sortTable(\'zeit\')">Zeitstempel</th>' +
       '</tr></thead><tbody>' + rows + '</tbody></table>';
     tc.innerHTML = thead;
+
+    // Nicht angemeldet
+    var angemeldeteNamen = data.map(function(d) { return d.name.trim().toLowerCase(); });
+    var nichtAngemeldet = eingeladene.filter(function(e) {
+      return !angemeldeteNamen.some(function(n) { return n.includes(e.name.trim().toLowerCase()) || e.name.trim().toLowerCase().includes(n); });
+    });
+
+    var nichtEl = document.getElementById('nicht-angemeldet');
+    if (nichtAngemeldet.length === 0) {
+      nichtEl.innerHTML = '<p style="color:var(--yes);font-size:14px">Alle haben sich angemeldet!</p>';
+    } else {
+      nichtEl.innerHTML = nichtAngemeldet.map(function(e) {
+        return '<span style="display:inline-block;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 12px;margin:4px;font-size:13px">' + escHtml(e.name) + '</span>';
+      }).join('');
+    }
 
   }).catch(function(e) {
     document.getElementById('table-container').innerHTML = '<div class="empty-state">Fehler: ' + e.message + '</div>';
