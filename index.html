@@ -283,12 +283,16 @@ function renderTable() {
     document.getElementById('total-count').textContent = data.length + ' Eintraege gesamt';
 
     var ja = data.filter(function(d) { return d.antwort === 'Ja'; }).length;
+    var jaOhneKind = data.filter(function(d) { return d.antwort === 'Ja' && d.kind !== 'Ja'; }).length;
+    var jaKind = data.filter(function(d) { return d.antwort === 'Ja' && d.kind === 'Ja'; }).length;
     var nein = data.filter(function(d) { return d.antwort === 'Nein'; }).length;
     var unsicher = data.filter(function(d) { return d.antwort === 'Unsicher'; }).length;
 
     document.getElementById('summary-row').innerHTML =
       '<div class="summary-card"><div class="num num-total">' + data.length + '</div><div class="lbl">Gesamt</div></div>' +
       '<div class="summary-card"><div class="num num-ja">' + ja + '</div><div class="lbl">Ja</div></div>' +
+      '<div class="summary-card"><div class="num num-ja">' + jaOhneKind + '</div><div class="lbl">Ja ohne Kinder</div></div>' +
+      '<div class="summary-card"><div class="num num-ja">' + jaKind + '</div><div class="lbl">Kinder</div></div>' +
       '<div class="summary-card"><div class="num num-nein">' + nein + '</div><div class="lbl">Nein</div></div>' +
       '<div class="summary-card"><div class="num num-unsicher">' + unsicher + '</div><div class="lbl">Unsicher</div></div>';
 
