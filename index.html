@@ -75,6 +75,8 @@
   table { width: 100%; border-collapse: collapse; }
   thead { background: var(--ink); color: white; }
   thead th { padding: 14px 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-align: left; }
+  thead th { cursor: pointer; }
+  thead th:hover { background: #2d2d2b; }
   tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--cream); }
@@ -294,13 +296,25 @@ async function renderTable() {
   var tc = document.getElementById('table-container');
   if (data.length === 0) { tc.innerHTML = '<div class="empty-state">Noch keine Eintraege vorhanden.</div>'; return; }
 
+data.sort(function(a, b) {
+  var av = a[sortKey] || '';
+  var bv = b[sortKey] || '';
+  if (av < bv) return sortAsc ? -1 : 1;
+  if (av > bv) return sortAsc ? 1 : -1;
+  return 0;
+});
+  
   var rows = data.map(function(d, i) {
     var cls = d.antwort === 'Ja' ? 'badge-ja' : d.antwort === 'Nein' ? 'badge-nein' : 'badge-unsicher';
     var zeit = d.zeit ? new Date(d.zeit).toLocaleString('de-DE') : '-';
-    return '<tr><td>' + (i+1) + '</td><td>' + escHtml(d.name) + '</td><td><span class="badge ' + cls + '">' + escHtml(d.antwort) + '</span></td><td style="color:var(--muted);font-size:12px">' + zeit + '</td></tr>';
+    var kindBadge = d.kind === 'Ja' ? '<span class="badge badge-ja">Ja</span>' : d.kind === 'Nein' ? '<span class="badge badge-nein">Nein</span>' : '<span style="color:var(--muted)">–</span>'; return '<tr><td>' + (i+1) + '</td><td>' + escHtml(d.name) + '</td><td><span class="badge ' + cls + '">' + escHtml(d.antwort) + '</span></td><td>' + kindBadge + '</td><td style="color:var(--muted);font-size:12px">' + zeit + '</td></tr>';
   }).join('');
 
-  tc.innerHTML = '<table><thead><tr><th>#</th><th>Name</th><th>Antwort</th><th>Zeitstempel</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  tc.innerHTML = '<table><thead><tr><th onclick="sortTable('id')">#</th>
+<th onclick="sortTable('name')">Name</th>
+<th onclick="sortTable('antwort')">Antwort</th>
+<th onclick="sortTable('kind')">Kind</th>
+<th onclick="sortTable('zeit')">Zeitstempel</th></tr></thead><tbody>' + rows + '</tbody></table>';
 }
 
 function escHtml(s) {
@@ -323,6 +337,13 @@ async function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
+  var sortKey = 'id';
+var sortAsc = true;
+
+function sortTable(key) {
+  if (sortKey === key) { sortAsc = !sortAsc; } else { sortKey = key; sortAsc = true; }
+  renderTable();
+}
 addPerson();
 </script>
 </body>
